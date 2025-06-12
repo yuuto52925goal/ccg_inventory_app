@@ -1,0 +1,9 @@
+import OrderList from '@/components/purchase-order/OrderList';
+
+export default function PurchaseOrderPage() {
+  return (
+    <div className="p-6">
+      <OrderList />
+    </div>
+  );
+}

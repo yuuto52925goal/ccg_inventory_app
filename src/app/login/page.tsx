@@ -33,16 +33,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
+    <div className="min-h-screen flex items-center justify-center bg-[#0f172a] text-white">
+      <div className="w-full max-w-md p-6 bg-[#1e293b] rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-6 text-center">
-          {isReset ? 'Reset Password' : 'Login'}
+          {isReset ? 'Reset Password' : 'Sign In'}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="email"
             placeholder="Email"
-            className="w-full p-2 border rounded"
+            className="w-full p-2 rounded bg-[#334155] border border-[#475569] text-white placeholder-gray-400"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -51,13 +51,13 @@ export default function LoginPage() {
             <input
               type="password"
               placeholder="Password"
-              className="w-full p-2 border rounded"
+              className="w-full p-2 rounded bg-[#334155] border border-[#475569] text-white placeholder-gray-400"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           )}
-          <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
+          <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white p-2 rounded">
             {isReset ? 'Send Reset Link' : 'Sign In'}
           </button>
         </form>
@@ -66,11 +66,11 @@ export default function LoginPage() {
             setIsReset(!isReset);
             setMessage('');
           }}
-          className="mt-4 text-sm text-blue-600 underline hover:text-blue-800"
+          className="mt-4 text-sm text-blue-400 hover:text-blue-500 underline block w-full text-center"
         >
           {isReset ? 'Back to login' : 'Forgot password?'}
         </button>
-        {message && <p className="mt-2 text-sm text-red-600">{message}</p>}
+        {message && <p className="mt-2 text-sm text-red-500 text-center">{message}</p>}
       </div>
     </div>
   );

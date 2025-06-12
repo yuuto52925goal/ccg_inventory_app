@@ -31,8 +31,8 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="w-full max-w-md p-6 bg-white shadow-md rounded-xl">
+    <div className="min-h-screen flex items-center justify-center bg-[#0f172a] text-white px-4">
+      <div className="w-full max-w-md p-6 bg-[#1e293b] shadow-md rounded-xl">
         <h1 className="text-2xl font-bold mb-4 text-center">Reset Password</h1>
 
         <form onSubmit={handlePasswordReset} className="space-y-4">
@@ -42,15 +42,15 @@ export default function ResetPasswordPage() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter new password"
             required
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 rounded-lg bg-[#334155] border border-[#475569] text-white placeholder-gray-400"
           />
 
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-2 font-semibold rounded-lg text-white ${
+            className={`w-full py-2 font-semibold rounded-lg text-white transition ${
               loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
-            } transition`}
+            }`}
           >
             {loading ? 'Resetting...' : 'Reset Password'}
           </button>
@@ -58,7 +58,7 @@ export default function ResetPasswordPage() {
           {message && (
             <p
               className={`text-sm text-center ${
-                message.includes('✅') ? 'text-green-600' : 'text-red-600'
+                message.includes('✅') ? 'text-green-500' : 'text-red-500'
               }`}
             >
               {message}

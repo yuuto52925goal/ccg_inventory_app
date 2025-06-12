@@ -8,9 +8,38 @@ export interface Address {
 }
 
 export interface Vendor {
+  vendor_id: number;
   business_name: string;
   address_id: number;
   phone: string;
   email: string;
   fax: string;
+}
+
+export interface PurchaseOrder {
+  po_id: number;
+  created_at: string;
+  vendor_id: number;
+  user_id: number;
+  total_amount: number;
+  status: string;
+}
+
+export interface PurchaseOrderItem {
+  po_id: number;
+  item_id: number;
+  qty: number;
+  cost: number;
+  line_total: number;
+}
+
+export interface Item {
+  item_id: number;
+  name: string;
+  strength: string;
+  size: string;
+  din_number: string;
+  default_price: number;
+  default_cost: number;
+  description: string;
 }
