@@ -21,7 +21,7 @@ export default function UpdateVendorModal({ vendor, onClose, onSuccess }: Update
     e.preventDefault();
     const { error } = await supabase
       .from('Vendor')
-      .update({ name, address, phone, email })
+      .update({ business_name: name, address_id: address, phone, email })
       .eq('business_name', vendor.business_name);
 
     if (error) setMessage(error.message);
@@ -33,23 +33,23 @@ export default function UpdateVendorModal({ vendor, onClose, onSuccess }: Update
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded shadow-lg max-w-md w-full">
-        <h2 className="text-xl font-semibold mb-4">Update Vendor</h2>
-        {message && <p className="text-red-600 mb-2">{message}</p>}
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+      <div className="bg-[#1e293b] text-white p-6 rounded-xl shadow-xl w-full max-w-md">
+        <h2 className="text-xl font-bold mb-4">Update Vendor</h2>
+        {message && <p className="text-red-400 mb-2">{message}</p>}
         <form onSubmit={handleUpdate} className="grid gap-4">
           <input
             type="text"
             placeholder="Name"
-            className="border p-2 rounded"
+            className="p-2 bg-[#334155] rounded outline-none"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
           <input
             type="text"
-            placeholder="Address"
-            className="border p-2 rounded"
+            placeholder="Address ID"
+            className="p-2 bg-[#334155] rounded outline-none"
             value={address}
             onChange={(e) => setAddress(Number(e.target.value))}
             required
@@ -57,28 +57,28 @@ export default function UpdateVendorModal({ vendor, onClose, onSuccess }: Update
           <input
             type="text"
             placeholder="Phone"
-            className="border p-2 rounded"
+            className="p-2 bg-[#334155] rounded outline-none"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />
           <input
             type="email"
             placeholder="Email"
-            className="border p-2 rounded"
+            className="p-2 bg-[#334155] rounded outline-none"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <div className="flex justify-end gap-2">
             <button
               type="button"
-              className="bg-gray-300 text-black px-4 py-2 rounded"
+              className="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700"
               onClick={onClose}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              className="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700 text-white"
             >
               Update
             </button>

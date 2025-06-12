@@ -16,12 +16,11 @@ export default function AddVendorModal({ onClose, onSuccess }: AddVendorModalPro
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [fax, setFax] = useState('');
-  const [message, setMessage] = useState('');   
+  const [message, setMessage] = useState('');
   const [addressData, setAddressData] = useState<Address[]>([]);
   const [showAddNewAddressModal, setShowAddNewAddressModal] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log(address);
     e.preventDefault();
     const { error } = await supabase.from('Vendor').insert({ business_name: name, address_id: address, phone, email, fax });
     if (error) setMessage(error.message);
@@ -38,28 +37,28 @@ export default function AddVendorModal({ onClose, onSuccess }: AddVendorModalPro
       if (error) setMessage(error.message);
       else {
         setAddressData(data);
-        setAddress(data[0].address_id);
+        if (data.length > 0) setAddress(data[0].address_id);
       }
     };
     getAddress();
   }, [showAddNewAddressModal]);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded shadow-lg max-w-md w-full">
-        <h2 className="text-xl font-semibold mb-4">Add New Vendor</h2>
-        {message && <p className="text-red-600 mb-2">{message}</p>}
+    <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+      <div className="bg-[#1e293b] text-white p-6 rounded-xl shadow-xl w-full max-w-md">
+        <h2 className="text-xl font-bold mb-4">Add New Vendor</h2>
+        {message && <p className="text-red-400 mb-2">{message}</p>}
         <form onSubmit={handleSubmit} className="grid gap-4">
           <input
             type="text"
             placeholder="Name"
-            className="border p-2 rounded"
+            className="p-2 bg-[#334155] rounded outline-none"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
           <select
-            className="border p-2 rounded"
+            className="p-2 bg-[#334155] rounded outline-none"
             value={address}
             onChange={(e) => setAddress(Number(e.target.value))}
           >
@@ -77,35 +76,35 @@ export default function AddVendorModal({ onClose, onSuccess }: AddVendorModalPro
           <input
             type="text"
             placeholder="Phone"
-            className="border p-2 rounded"
+            className="p-2 bg-[#334155] rounded outline-none"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />
           <input
             type="email"
             placeholder="Email"
-            className="border p-2 rounded"
+            className="p-2 bg-[#334155] rounded outline-none"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <input 
             type="text"
             placeholder="Fax"
-            className="border p-2 rounded"
+            className="p-2 bg-[#334155] rounded outline-none"
             value={fax}
             onChange={(e) => setFax(e.target.value)}
           />
           <div className="flex justify-end gap-2">
             <button
               type="button"
-              className="bg-gray-300 text-black px-4 py-2 rounded"
+              className="bg-gray-600 px-4 py-2 rounded hover:bg-gray-700"
               onClick={onClose}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
             >
               Save
             </button>
