@@ -72,7 +72,7 @@ export default function DashboardPage() {
             <div className="bg-[#1e293b] p-6 rounded shadow">
               <h2 className="text-xl font-semibold mb-4">Support Center</h2>
               <p className="text-sm text-gray-400">
-                In ac iaculis lorem. Praesent tempor dictum tellus et malesuada. Sed sed ullamcorper lorem, in faucibus odio.
+                Any issue or something feedback? Click the button below.
               </p>
               <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Contact Us</button>
             </div>

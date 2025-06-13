@@ -36,7 +36,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#0f172a] text-white">
       <div className="w-full max-w-md p-6 bg-[#1e293b] rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-6 text-center">
-          {isReset ? 'Reset Password' : 'Sign In'}
+          {isReset ? 'Reset Password' : 'Log In'}
         </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -58,7 +58,7 @@ export default function LoginPage() {
             />
           )}
           <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white p-2 rounded">
-            {isReset ? 'Send Reset Link' : 'Sign In'}
+            {isReset ? 'Send Reset Link' : 'Log In'}
           </button>
         </form>
         <button
