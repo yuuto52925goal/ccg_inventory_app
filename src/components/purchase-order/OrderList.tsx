@@ -50,7 +50,7 @@ export default function OrderList() {
       {message && <p className="text-red-400 mb-4">{message}</p>}
 
       <div className="overflow-x-auto">
-        <table className="min-w-full text-sm border bg-[#1e293b]">
+        <table className="text-sm border bg-[#1e293b]">
           <thead className="bg-[#334155] text-white">
             <tr>
               <th className="p-2 border">PO ID</th>
