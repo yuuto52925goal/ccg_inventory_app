@@ -60,19 +60,20 @@ export default function AddVendorModal({ onClose, onSuccess }: AddVendorModalPro
           <select
             className="p-2 bg-[#334155] rounded outline-none"
             value={address}
-            onChange={(e) => setAddress(Number(e.target.value))}
+            onChange={(e) => {
+              if (e.target.value === 'new') {
+                setShowAddNewAddressModal(true);
+              } else {
+                setAddress(Number(e.target.value));
+              }
+            }}
           >
             {addressData.map((address) => (
               <option key={address.address_id} value={address.address_id}>{address.address_name}</option>
             ))}
+            <option value="new">+ Add new address</option>
           </select>
-          <button
-            type="button"
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            onClick={() => setShowAddNewAddressModal(true)}
-          >
-            Add New Address
-          </button>
+          {showAddNewAddressModal && <AddNewAddressModal onClose={() => setShowAddNewAddressModal(false)} onSuccess={() => {}} />}
           <input
             type="text"
             placeholder="Phone"

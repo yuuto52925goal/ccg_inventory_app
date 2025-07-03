@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { Vendor, Item } from '@/types/supabsePublicType';
 import AddVendorModal from '@/components/vendor/AddVendorModal';
 import AddNewItemModal from './AddItem';
-import Menu from '@/components/common/Menu';
 
 export default function CreatePurchaseOrder() {
   const [vendorId, setVendorId] = useState<number | null>(null);
@@ -73,8 +72,6 @@ export default function CreatePurchaseOrder() {
 
   return (
     <div className="min-h-screen flex bg-[#0f172a] text-white">
-      <Menu/>
-
       <main className="flex-1 p-6">
         <h2 className="text-3xl font-semibold mb-4">Create New Purchase Order</h2>
         {message && <p className="text-red-600 mb-4">{message}</p>}
@@ -107,7 +104,13 @@ export default function CreatePurchaseOrder() {
               <div key={idx} className="flex items-center gap-2 mb-2">
                 <select
                   value={entry.item_id}
-                  onChange={(e) => handleChangeItem(idx, 'item_id', e.target.value)}
+                  onChange={(e) => {
+                    if (e.target.value === 'new') {
+                      setShowAddItem(true);
+                    } else {
+                      handleChangeItem(idx, 'item_id', e.target.value);
+                    }
+                  }}
                   className="border border-gray-600 bg-[#0f172a] text-white p-2 rounded"
                 >
                   {items.map((item) => (
@@ -115,6 +118,7 @@ export default function CreatePurchaseOrder() {
                       {item.name}
                     </option>
                   ))}
+                  <option value="new">+ Add new item</option>
                 </select>
                 <input
                   type="number"
