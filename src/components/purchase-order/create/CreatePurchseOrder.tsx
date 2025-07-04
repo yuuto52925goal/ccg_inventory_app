@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
-import { Vendor, Item } from '@/types/supabsePublicType';
+import { Vendor, Item, PurchaseOrderItem } from '@/types/supabsePublicType';
 import AddVendorModal from '@/components/vendor/AddVendorModal';
 import AddNewItemModal from './AddItem';
+import { useAuth } from '@/context/AuthProvider';
 
 export default function CreatePurchaseOrder() {
   const [vendorId, setVendorId] = useState<number | null>(null);
@@ -16,6 +17,7 @@ export default function CreatePurchaseOrder() {
   const router = useRouter();
   const [showAddVendor, setShowAddVendor] = useState(false);
   const [showAddItem, setShowAddItem] = useState(false);
+  const {user} = useAuth();
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -51,21 +53,23 @@ export default function CreatePurchaseOrder() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!vendorId || selectedItems.length === 0) return;
-
+    if (!vendorId || selectedItems.length === 0 || !user) return;
+    console.log(user.id)
     const { data: poData, error: poError } = await supabase
       .from('PurchaseOrder')
-      .insert({ vendor_id: vendorId, status: 'pending', total_amount: 0 })
+      .insert({ vendor_id: vendorId, status: 'pending', total_amount: selectedItems.length, user_id:  user.user_id})
       .select()
       .single();
 
     if (poError) return setMessage(poError.message);
 
     const po_id = poData.po_id;
-    const poItems = selectedItems.map((item) => ({ ...item, po_id }));
-    const { error: itemError } = await supabase.from('po_item').insert(poItems);
-
+    const poItems: PurchaseOrderItem[] = selectedItems.map((item) => ({ ...item, po_id }));
+    const { error: itemError } = await supabase.from('POItem').insert(poItems);
     if (itemError) return setMessage(itemError.message);
+
+    // Add items in stock
+    
 
     router.push('/purchase-order');
   };
@@ -99,7 +103,11 @@ export default function CreatePurchaseOrder() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Items</label>
+            <div className='flex items-center gap-2 mb-2'>
+              <label className="block text-sm font-medium mb-1 p-2 w-37">Items</label>
+              <label className="block text-sm font-medium mb-1 p-2 w-24">qty</label>
+              <label className="block text-sm font-medium mb-1 p-2 w-24">price</label>
+            </div>
             {selectedItems.map((entry, idx) => (
               <div key={idx} className="flex items-center gap-2 mb-2">
                 <select
@@ -109,6 +117,8 @@ export default function CreatePurchaseOrder() {
                       setShowAddItem(true);
                     } else {
                       handleChangeItem(idx, 'item_id', e.target.value);
+                      const default_cost = items.find((item) => item.item_id === entry.item_id)?.default_cost ?? 1;
+                      handleChangeItem(idx, "cost", default_cost)
                     }
                   }}
                   className="border border-gray-600 bg-[#0f172a] text-white p-2 rounded"

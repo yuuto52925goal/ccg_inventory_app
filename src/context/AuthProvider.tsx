@@ -3,29 +3,57 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
 
+interface ExtendedUser extends User {
+  user_id?: string;
+}
+
 interface AuthContextType {
-  user: User | null;
+  user: ExtendedUser | null;
   loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType>({ user: null, loading: true });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<ExtendedUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      console.log(data.session?.user);
-      setUser(data.session?.user ?? null);
-      setLoading(false);
+      const { data: sessionData } = await supabase.auth.getSession();
+      const authUser = sessionData.session?.user;
+      if (!authUser) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+      const { data: userData, error } = await supabase
+        .from('User')
+        .select('*')
+        .eq('email', authUser.email)
+        .maybeSingle();
+
+      if (error || !userData) {
+        console.error("No user found in User table", error);
+        setUser(authUser);
+      } else {
+        const extendedUser: ExtendedUser = {
+          ...authUser,
+          ...userData,
+        };
+        setUser(extendedUser);
+        setLoading(false);
+      };
     };
 
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      if (session?.user) {
+        getSession();
+      } else {
+        setUser(null);
+      }
     });
-
+  
     getSession();
 
     return () => {
