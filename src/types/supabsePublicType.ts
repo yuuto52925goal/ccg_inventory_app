@@ -43,3 +43,12 @@ export interface Item {
   default_cost: number;
   description: string;
 }
+
+export interface StockItem {
+  item_id: number;
+  quantity: number;
+  cost_price: number;
+  lot_number: string;
+  expire_date: string;
+  vendor_id: number;
+}
