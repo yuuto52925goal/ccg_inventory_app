@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
-import { Vendor, Item, PurchaseOrderItem } from '@/types/supabsePublicType';
+import { Vendor, Item, PurchaseOrderItem, StockItem } from '@/types/supabsePublicType';
 import AddVendorModal from '@/components/vendor/AddVendorModal';
 import AddNewItemModal from './AddItem';
 import { useAuth } from '@/context/AuthProvider';
@@ -12,7 +12,7 @@ export default function CreatePurchaseOrder() {
   const [vendorId, setVendorId] = useState<number | null>(null);
   const [items, setItems] = useState<Item[]>([]);
   const [vendors, setVendors] = useState<Vendor[]>([]);
-  const [selectedItems, setSelectedItems] = useState<{ item_id: number; qty: number; cost: number; line_total: number }[]>([]);
+  const [selectedItems, setSelectedItems] = useState<{ item_id: number; qty: number; cost: number; line_total: number, lot_number: string, expire: string }[]>([]);
   const [message, setMessage] = useState('');
   const router = useRouter();
   const [showAddVendor, setShowAddVendor] = useState(false);
@@ -42,17 +42,28 @@ export default function CreatePurchaseOrder() {
     else setVendors(data);
   };
 
-  const handleChangeItem = (index: number, field: 'item_id' | 'qty' | 'cost', value: string | number) => {
+  const handleChangeItem = (index: number, field: 'item_id' | 'qty' | 'cost' | 'lot_number' | 'expire', value: string | number) => {
     const updated = [...selectedItems];
-    updated[index][field] = Number(value);
-    if (field === 'qty' || field === 'cost') {
-      updated[index].line_total = updated[index].qty * updated[index].cost;
+    if (field === 'lot_number' || field === 'expire') {
+      updated[index][field] = value as string;
+    }else {
+      updated[index][field] = Number(value);
+      if (field === 'qty' || field === 'cost') {
+        updated[index].line_total = updated[index].qty * updated[index].cost;
+      }
     }
     setSelectedItems(updated);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Check if selectedItems are available
+    const invalidItems = selectedItems.filter((item) => item.lot_number === "" || item.expire === "" || item.qty === 0 || item.cost === 0);
+    if (invalidItems.length > 0) {
+      setMessage("Please fill in all fields for each item");
+      return;
+    }
+
     if (!vendorId || selectedItems.length === 0 || !user) return;
     console.log(user.id)
     const { data: poData, error: poError } = await supabase
@@ -60,16 +71,17 @@ export default function CreatePurchaseOrder() {
       .insert({ vendor_id: vendorId, status: 'pending', total_amount: selectedItems.length, user_id:  user.user_id})
       .select()
       .single();
-
     if (poError) return setMessage(poError.message);
-
     const po_id = poData.po_id;
-    const poItems: PurchaseOrderItem[] = selectedItems.map((item) => ({ ...item, po_id }));
+    const poItems: PurchaseOrderItem[] = selectedItems.map((item): PurchaseOrderItem => ({ item_id: item.item_id, qty: item.qty, cost: item.cost, line_total: item.line_total, po_id }));
     const { error: itemError } = await supabase.from('POItem').insert(poItems);
     if (itemError) return setMessage(itemError.message);
 
     // Add items in stock
-    
+    const stockItems: StockItem[] = selectedItems.map((item): StockItem => ({ item_id: item.item_id, quantity: item.qty, lot_number: item.lot_number, expire_date: item.expire, vendor_id: vendorId, cost_price: item.cost }));
+    console.log(stockItems)
+    const { error: stockError } = await supabase.from('ItemStock').insert(stockItems);
+    if (stockError) return setMessage(stockError.message);
 
     router.push('/purchase-order');
   };
@@ -104,7 +116,9 @@ export default function CreatePurchaseOrder() {
 
           <div>
             <div className='flex items-center gap-2 mb-2'>
-              <label className="block text-sm font-medium mb-1 p-2 w-37">Items</label>
+              <label className="block text-sm font-medium mb-1 p-2 w-37">Item</label>
+              <label className="block text-sm font-medium mb-1 p-2 w-33">Lot Number</label>
+              <label className="block text-sm font-medium mb-1 p-2 w-38">Expire</label>
               <label className="block text-sm font-medium mb-1 p-2 w-24">qty</label>
               <label className="block text-sm font-medium mb-1 p-2 w-24">price</label>
             </div>
@@ -131,6 +145,19 @@ export default function CreatePurchaseOrder() {
                   <option value="new">+ Add new item</option>
                 </select>
                 <input
+                  type="text"
+                  placeholder="lot number"
+                  value={entry.lot_number}
+                  onChange={(e) => handleChangeItem(idx, 'lot_number', e.target.value)}
+                  className="border border-gray-600 bg-[#0f172a] text-white p-2 rounded w-32"
+                />
+                <input
+                  type="date"
+                  value={entry.expire}
+                  onChange={(e) => handleChangeItem(idx, 'expire', e.target.value)}
+                  className="border border-gray-600 bg-[#0f172a] text-white p-2 rounded"
+                />
+                <input
                   type="number"
                   value={entry.qty}
                   onChange={(e) => handleChangeItem(idx, 'qty', e.target.value)}
@@ -145,11 +172,9 @@ export default function CreatePurchaseOrder() {
                   min={1}
                 />
                 Total cost {entry.cost * entry.qty}
-
-                
               </div>
             ))}
-            <button type="button" onClick={() => setSelectedItems([...selectedItems, { item_id: items[0]?.item_id || 0, qty: 1, cost: 0, line_total: 0 }])} className="text-blue-400 underline text-sm">
+            <button type="button" onClick={() => setSelectedItems([...selectedItems, { item_id: items[0]?.item_id || 0, qty: 1, cost: 0, line_total: 0, expire: "", lot_number: "" }])} className="text-blue-400 underline text-sm">
               + Add Item
             </button>
           </div>
