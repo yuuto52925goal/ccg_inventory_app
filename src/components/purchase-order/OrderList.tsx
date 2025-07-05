@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { PurchaseOrder, PurchaseOrderItem } from '@/types/supabsePublicType';
 import Link from 'next/link';
+// import * as itemStock from "@/service/itemStock"
 
 interface OrderListType extends PurchaseOrder {
   items: PurchaseOrderItem[];

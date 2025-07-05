@@ -52,3 +52,8 @@ export interface StockItem {
   expire_date: string;
   vendor_id: number;
 }
+
+export interface InventoryType extends StockItem {
+  vendor_name: string;
+  item_name: string;
+}
