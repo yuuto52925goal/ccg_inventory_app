@@ -57,3 +57,13 @@ export interface InventoryType extends StockItem {
   vendor_name: string;
   item_name: string;
 }
+
+export interface CustomerType {
+  customer_id: number;
+  business_name: string;
+  address_id: number;
+  phone: string;
+  email: string;
+  fax: string;
+  payment_term: string;
+}

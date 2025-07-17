@@ -7,7 +7,7 @@ export default function InventoryPage() {
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold text-white">Inventory</h2>
         <Link href="/invoice/create" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          Create New
+          Create New Invoice
         </Link>
       </div>
       <InventoryTable />

@@ -1,19 +1,11 @@
 'use client';
-
-import { useEffect, useState } from 'react';
-import * as itemStock from "@/service/itemStock"
-import { InventoryType } from '@/types/supabsePublicType';
+import { useInventoryStock } from '@/hook/useInventoryStock';
 
 export default function InventoryTable() {
-  const [items, setItems] = useState<InventoryType[]>([]);
+  const { items, loading, error } = useInventoryStock();
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      const inventoryStock = await itemStock.fetchInventoryStock()
-      setItems(inventoryStock)
-    };
-    fetchItems();
-  }, []);
+  if (loading) return <div className="text-white">Loading...</div>;
+  if (error) return <div className="text-red-400">{error}</div>;
 
   return (
     <div>

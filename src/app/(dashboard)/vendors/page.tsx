@@ -2,7 +2,7 @@ import VendorList from '@/components/vendor/VendorList';
 
 export default function VendorsPage() {
   return (
-    <div className="p-6 bg-[#0f172a] text-white">
+    <div className="p-6 bg-[#0f172a] text-white min-h-screen">
       <VendorList />
     </div>
   );
