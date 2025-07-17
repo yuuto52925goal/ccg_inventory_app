@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Address, CustomerType } from '@/types/supabsePublicType';
+import React, { useState } from 'react';
+import { CustomerType } from '@/types/supabsePublicType';
 import AddNewAddressModal from '../address/AddNewAddressModal';
+import { useAddress } from '@/hook/useAddress';
 
 interface AddCustomerModalProps {
   onClose: () => void;
@@ -20,23 +21,32 @@ export default function AddCustomerModal({ onClose, onSuccess, addCustomer }: Ad
     payment_term: '',
   });
   const [message, setMessage] = useState('');
-  const [addressData, setAddressData] = useState<Address[]>([]);
   const [showAddNewAddressModal, setShowAddNewAddressModal] = useState(false);
+  const { addressData, loading: addressLoading, error: addressError } = useAddress();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
-      [name]: name === 'address_id' ? Number(value) : value,
+      [name]: value,
     }));
+  };
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    if (value === 'new') {
+      setShowAddNewAddressModal(true);
+    } else {
+      setForm((prev) => ({ ...prev, address_id: Number(value) }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      console.log(form)
       await addCustomer({
-        ...form,
-        customer_id: 0, // Placeholder, backend should assign
+        ...form
       });
       setMessage('');
       onSuccess();
@@ -47,17 +57,12 @@ export default function AddCustomerModal({ onClose, onSuccess, addCustomer }: Ad
     }
   };
 
-  useEffect(() => {
-    const getAddress = async () => {
-      const res = await fetch('/api/address'); // Replace with your address fetch logic
-      if (res.ok) {
-        const data = await res.json();
-        setAddressData(data);
-        if (data.length > 0) setForm((prev) => ({ ...prev, address_id: data[0].address_id }));
-      }
-    };
-    getAddress();
-  }, [showAddNewAddressModal]);
+  // Set default address_id when addressData loads
+  // React.useEffect(() => {
+  //   if (addressData.length > 0) {
+  //     setForm((prev) => ({ ...prev, address_id: addressData[0].address_id }));
+  //   }
+  // }, [addressData]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
@@ -78,9 +83,12 @@ export default function AddCustomerModal({ onClose, onSuccess, addCustomer }: Ad
             name="address_id"
             className="p-2 bg-[#334155] rounded outline-none"
             value={form.address_id}
-            onChange={handleChange}
+            onChange={handleAddressChange}
+            disabled={addressLoading}
           >
-            {addressData.map((address) => (
+            {addressLoading && <option>Loading addresses...</option>}
+            {addressError && <option>Error loading addresses</option>}
+            {!addressLoading && !addressError && addressData.map((address) => (
               <option key={address.address_id} value={address.address_id}>{address.address_name}</option>
             ))}
             <option value="new">+ Add new address</option>

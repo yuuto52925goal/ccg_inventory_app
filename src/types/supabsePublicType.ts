@@ -59,7 +59,7 @@ export interface InventoryType extends StockItem {
 }
 
 export interface CustomerType {
-  customer_id: number;
+  customer_id?: number;
   business_name: string;
   address_id: number;
   phone: string;

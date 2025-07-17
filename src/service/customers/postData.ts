@@ -2,9 +2,9 @@ import { supabase } from "@/lib/supabase";
 import { CustomerType } from "@/types/supabsePublicType";
 
 export const addCustomer = async (newCustomer: CustomerType): Promise<void> => {
-    const {error} = await supabase.from('Customer').insert(newCustomer)
-    if (error) throw error;
-    return;
+  const {error} = await supabase.from('Customer').insert({...newCustomer})
+  if (error) throw error;
+  return;
 }
 
 export const updateCustomer = async (customer: CustomerType): Promise<void> => {

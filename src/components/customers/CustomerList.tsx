@@ -48,7 +48,12 @@ export default function CustomerList() {
                   <td className="border px-4 py-2">{customer.fax}</td>
                   <td className="border px-4 py-2">{customer.payment_term}</td>
                   <td className="border px-4 py-2 text-blue-400 cursor-pointer hover:text-blue-600" onClick={() => { setCustomerToUpdate(customer); setShowUpdateModal(true); }}>Edit</td>
-                  <td className="border px-4 py-2 text-red-400 cursor-pointer hover:text-red-600" onClick={() => deleteCustomer(customer.customer_id)}>Delete</td>
+                  <td
+                    className="border px-4 py-2 text-red-400 cursor-pointer hover:text-red-600"
+                    onClick={() => customer.customer_id !== undefined && deleteCustomer(customer.customer_id)}
+                  >
+                    Delete
+                  </td>
                 </tr>
               ))
             )}
