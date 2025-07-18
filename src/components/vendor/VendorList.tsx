@@ -69,8 +69,8 @@ export default function VendorList() {
                 <td className="border px-4 py-2">{vendor.phone}</td>
                 <td className="border px-4 py-2">{vendor.email}</td>
                 <td className="border px-4 py-2">{vendor.fax}</td>
-                <td className="border px-4 py-2 text-blue-400 cursor-pointer hover:text-blue-600" onClick={() => editVendor(vendor.business_name)}>Edit</td>
-                <td className="border px-4 py-2 text-red-400 cursor-pointer hover:text-red-600" onClick={() => deleteVendor(vendor.business_name)}>Delete</td>
+                <td className="border px-4 py-2 bg-blue-400 cursor-pointer hover:bg-blue-600" onClick={() => editVendor(vendor.business_name)}>Edit</td>
+                <td className="border px-4 py-2 bg-red-400 cursor-pointer hover:bg-red-600" onClick={() => deleteVendor(vendor.business_name)}>Delete</td>
               </tr>
             ))}
           </tbody>
