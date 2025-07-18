@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Address, CustomerType } from '@/types/supabsePublicType';
+import { useState } from 'react';
+import { CustomerType } from '@/types/supabsePublicType';
 import AddNewAddressModal from '../address/AddNewAddressModal';
+import { useAddress } from '@/hook/useAddress';
 
 interface UpdateCustomerModalProps {
   customer: CustomerType;
@@ -21,8 +22,8 @@ export default function UpdateCustomerModal({ customer, onClose, onSuccess, upda
     payment_term: customer.payment_term,
   });
   const [message, setMessage] = useState('');
-  const [addressData, setAddressData] = useState<Address[]>([]);
   const [showAddNewAddressModal, setShowAddNewAddressModal] = useState(false);
+  const { addressData, loading: addressLoading, error: addressError } = useAddress();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -30,6 +31,15 @@ export default function UpdateCustomerModal({ customer, onClose, onSuccess, upda
       ...prev,
       [name]: name === 'address_id' ? Number(value) : value,
     }));
+  };
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
+    if (value === 'new') {
+      setShowAddNewAddressModal(true);
+    } else {
+      setForm((prev) => ({ ...prev, address_id: Number(value) }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,17 +57,6 @@ export default function UpdateCustomerModal({ customer, onClose, onSuccess, upda
       else setMessage('Failed to update customer');
     }
   };
-
-  useEffect(() => {
-    const getAddress = async () => {
-      const res = await fetch('/api/address'); // Replace with your address fetch logic
-      if (res.ok) {
-        const data = await res.json();
-        setAddressData(data);
-      }
-    };
-    getAddress();
-  }, [showAddNewAddressModal]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
@@ -78,9 +77,11 @@ export default function UpdateCustomerModal({ customer, onClose, onSuccess, upda
             name="address_id"
             className="p-2 bg-[#334155] rounded outline-none"
             value={form.address_id}
-            onChange={handleChange}
+            onChange={handleAddressChange}
           >
-            {addressData.map((address) => (
+            {addressLoading && <option>Loading addresses...</option>}
+            {addressError && <option>Error loading addresses</option>}
+            {!addressLoading && !addressError && addressData.map((address) => (
               <option key={address.address_id} value={address.address_id}>{address.address_name}</option>
             ))}
             <option value="new">+ Add new address</option>
