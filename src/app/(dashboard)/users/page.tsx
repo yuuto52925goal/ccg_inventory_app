@@ -15,7 +15,7 @@ export default function UsersPage() {
     <div className="bg-[#1e293b] rounded-lg p-6 shadow mb-6">
       <InviteUserForm />
     </div>
-    <div className="bg-[#1e293b] rounded-lg p-6 shadow">
+    {/* <div className="bg-[#1e293b] rounded-lg p-6 shadow">
       <h3 className="text-xl font-medium mb-4">User Access Log</h3>
       <table className="min-w-full text-sm">
         <thead className="bg-[#334155]">
@@ -31,10 +31,9 @@ export default function UsersPage() {
             <td className="p-2">alice@example.com</td>
             <td className="p-2">Edited invoice INV-201</td>
           </tr>
-          {/* Add more logs dynamically later */}
         </tbody>
       </table>
-    </div>
+    </div> */}
   </div>
   );
 }

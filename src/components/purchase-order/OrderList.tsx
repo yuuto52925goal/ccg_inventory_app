@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import { PurchaseOrder, PurchaseOrderItem } from '@/types/supabsePublicType';
-import Link from 'next/link';
 // import * as itemStock from "@/service/itemStock"
 
 interface OrderListType extends PurchaseOrder {
@@ -41,26 +40,20 @@ export default function OrderList() {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-bold text-white">Purchase Orders</h2>
-        <Link href="/purchase-order/create" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          Create New
-        </Link>
-      </div>
 
       {message && <p className="text-red-400 mb-4">{message}</p>}
 
       <div className="overflow-x-auto">
-        <table className="text-sm border bg-[#1e293b]">
+        <table className="min-w-full text-sm border bg-[#1e293b]">
           <thead className="bg-[#334155] text-white">
             <tr>
-              <th className="p-2 border">PO ID</th>
-              <th className="p-2 border">Date</th>
-              <th className="p-2 border">Vendor</th>
-              <th className="p-2 border">User</th>
-              <th className="p-2 border">Total</th>
-              <th className="p-2 border">Status</th>
-              <th className="p-2 border">Items</th>
+              <th className="px-4 py-2 border">PO ID</th>
+              <th className="px-4 py-2 border">Date</th>
+              <th className="px-4 py-2 border">Vendor</th>
+              <th className="px-4 py-2 border">User</th>
+              <th className="px-4 py-2 border">Total</th>
+              <th className="px-4 py-2 border">Status</th>
+              <th className="px-4 py-2 border">Items</th>
             </tr>
           </thead>
           <tbody>
@@ -68,16 +61,16 @@ export default function OrderList() {
               <React.Fragment key={order.po_id}>
                 <tr
                   key={order.po_id}
-                  className="cursor-pointer hover:bg-[#475569] text-white"
+                  className="cursor-pointer hover:bg-[#475569] text-white min-w-full"
                   onClick={() => handleExtendedId(order.po_id)}
                 >
-                  <td className="p-2 border">{order.po_id}</td>
-                  <td className="p-2 border">{new Date(order.created_at).toLocaleDateString()}</td>
-                  <td className="p-2 border">{order.Vendor?.business_name}</td>
-                  <td className="p-2 border">{order.User?.name}</td>
-                  <td className="p-2 border">${order.total_amount.toFixed(2)}</td>
-                  <td className="p-2 border">{order.status}</td>
-                  <td className="p-2 border">{order.POItem?.length || 0} items</td>
+                  <td className="px-4 py-2 border">{order.po_id}</td>
+                  <td className="px-4 py-2 border">{new Date(order.created_at).toLocaleDateString()}</td>
+                  <td className="px-4 py-2 border">{order.Vendor?.business_name}</td>
+                  <td className="px-4 py-2 border">{order.User?.name}</td>
+                  <td className="px-4 py-2 border">${order.total_amount.toFixed(2)}</td>
+                  <td className="px-4 py-2 border">{order.status}</td>
+                  <td className="px-4 py-2 border">{order.POItem?.length || 0} items</td>
                 </tr>
                 {extendedId === order.po_id && (
                   <tr className="bg-gray-900 text-white">

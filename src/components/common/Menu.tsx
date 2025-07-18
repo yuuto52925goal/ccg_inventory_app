@@ -9,7 +9,7 @@ export default function Menu() {
         "vendors",
         "inventory",
         "reports",
-        "employees",
+        // "employees",
         "users",
       ];
 
