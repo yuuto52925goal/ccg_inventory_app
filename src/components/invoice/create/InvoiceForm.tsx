@@ -3,15 +3,18 @@
 import { useState } from "react";
 import { useInvoiceForm } from "@/hook/useInvoiceForm";
 import AddItemModal from "./AddItemModal";
+import AddCustomerModal from "@/components/customers/AddCustomerModal";
+// import { useAuth } from "@/context/AuthProvider";
 
 export default function InvoiceForm() {
   const [showAddItemModal, setShowAddItemModal] = useState(false);
-  const [userId] = useState(1); // This should come from auth context in real app
+  const [showAddCustomerModal, setShowAddCustomerModal] = useState(false);
   
   const {
     customers,
     items,
     selectedItems,
+    setSelectedItems,
     handleChangeItem,
     removeItem,
     getTotal,
@@ -20,8 +23,10 @@ export default function InvoiceForm() {
     loading,
     invoice,
     setInvoice,
-    addItemWithDetails
-  } = useInvoiceForm(userId);
+    addItemWithDetails,
+    addCustomer,
+    refetch
+  } = useInvoiceForm();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,10 +34,8 @@ export default function InvoiceForm() {
   };
 
   return (
-    <div className="mr-10 ml-10 mx-auto p-6 bg-gray-800 text-gray-100 rounded-lg shadow-lg">
-      
+    <div className="mr-8 ml-8 mx-auto p-6 bg-gray-800 text-gray-100 rounded-lg shadow-lg">
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Customer Selection */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-100 mb-2">
@@ -40,7 +43,13 @@ export default function InvoiceForm() {
             </label>
             <select
               value={invoice.customer_id || ""}
-              onChange={(e) => setInvoice({...invoice, customer_id: Number(e.target.value)})}
+              onChange={(e) => {
+                if (e.target.value === "+"){
+                  setShowAddCustomerModal(true)
+                }else{
+                  setInvoice({...invoice, customer_id: Number(e.target.value)})
+                }
+              }}
               className="w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
@@ -50,6 +59,7 @@ export default function InvoiceForm() {
                   {customer.business_name}
                 </option>
               ))}
+              <option value="+" className="text-gray-400">+ Add new customer</option>
             </select>
           </div>
           
@@ -185,6 +195,7 @@ export default function InvoiceForm() {
                 total_amount: 0,
                 is_paid: false,
               });
+              setSelectedItems([])
             }}
             className="px-6 py-2 border border-gray-700 text-gray-100 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500"
           >
@@ -200,7 +211,13 @@ export default function InvoiceForm() {
         </div>
       </form>
 
-      {/* Add Item Modal */}
+      {showAddCustomerModal && (
+        <AddCustomerModal
+          onClose={() => setShowAddCustomerModal(false)}
+          onSuccess={refetch}
+          addCustomer={addCustomer}
+        />
+      )}
       {showAddItemModal && (
         <AddItemModal
           onClose={() => setShowAddItemModal(false)}
@@ -211,6 +228,7 @@ export default function InvoiceForm() {
           items={items || []}
         />
       )}
+
     </div>
   );
 }

@@ -3,13 +3,15 @@ import { supabase } from "@/lib/supabase";
 import { InvoiceType, InvoiceItemType } from "@/types/supabsePublicType";
 import { useCustomer } from "./useCustomer";
 import { useInventoryStock } from "./useInventoryStock";
+import { useAuth } from "@/context/AuthProvider";
 
-export const useInvoiceForm = (userId: number) => {
+export const useInvoiceForm = () => {
   const [selectedItems, setSelectedItems] = useState<InvoiceItemType[]>([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const {items} = useInventoryStock()
-  const { customers} = useCustomer();
+  const { items } = useInventoryStock()
+  const { customers,  addCustomer, refetch} = useCustomer();
+  const { user } = useAuth();
   const [invoice, setInvoice] = useState<InvoiceType>({
     created_at: "",
     customer_id: 0,
@@ -56,7 +58,7 @@ export const useInvoiceForm = (userId: number) => {
   const submit = async () => {
     setLoading(true);
     setMessage("");
-    if (selectedItems.length === 0 || !userId) {
+    if (selectedItems.length === 0 || !user?.id) {
       setMessage("Please select a customer and add at least one item.");
       setLoading(false);
       return;
@@ -65,7 +67,7 @@ export const useInvoiceForm = (userId: number) => {
     const { data: invoiceData, error: invoiceError } = await supabase
       .from("Invoice")
       .insert({
-        user_id: userId,
+        user_id: user?.id,
         total_amount: getTotal(),
         is_paid: false,
         created_at: new Date().toISOString(),
@@ -101,6 +103,7 @@ export const useInvoiceForm = (userId: number) => {
     customers,
     items,
     selectedItems,
+    setSelectedItems,
     handleChangeItem,
     addItem,
     addItemWithDetails,
@@ -110,6 +113,8 @@ export const useInvoiceForm = (userId: number) => {
     message,
     loading,
     invoice,
-    setInvoice
+    setInvoice,
+    addCustomer,
+    refetch
   };
 };
