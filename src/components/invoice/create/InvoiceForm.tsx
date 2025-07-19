@@ -2,12 +2,11 @@
 
 import { useState } from "react";
 import { useInvoiceForm } from "@/hook/useInvoiceForm";
-import AddItemModal from "./AddItemModal";
 import AddCustomerModal from "@/components/customers/AddCustomerModal";
+import { ItemSelect } from "./ItemSelect";
 // import { useAuth } from "@/context/AuthProvider";
 
 export default function InvoiceForm() {
-  const [showAddItemModal, setShowAddItemModal] = useState(false);
   const [showAddCustomerModal, setShowAddCustomerModal] = useState(false);
   
   const {
@@ -77,18 +76,23 @@ export default function InvoiceForm() {
           </div>
         </div>
 
-        {/* Items Section */}
         <div className="border border-gray-700 rounded-lg p-4 bg-gray-800">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold text-gray-100">Invoice Items</h2>
-            <button
+            {/* <button
               type="button"
               onClick={() => setShowAddItemModal(true)}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               Add Item
-            </button>
+            </button> */}
           </div>
+          <ItemSelect
+            items={items}
+            onAddItem={(item, qty, price, itemName) => {
+              addItemWithDetails(item.item_id, qty, price, itemName);
+            }}
+          />
 
           {selectedItems.length === 0 ? (
             <p className="text-gray-400 text-center py-8">No items added yet. Click &quot;Add Item&quot; to start.</p>
@@ -96,20 +100,20 @@ export default function InvoiceForm() {
             <div className="space-y-4">
               {selectedItems.map((item, index) => (
                 <div key={index} className="grid grid-cols-12 gap-4 items-center p-3 bg-gray-900 rounded-md">
-                  <div className="col-span-4">
-                    <select
+                  <div className="col-span-2">
+                    <label className="block w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">{item.item_name}</label>
+                    {/* <select
                       value={item.item_id || ""}
                       onChange={(e) => handleChangeItem(index, "item_id", e.target.value)}
                       className="w-full px-3 py-2 border border-gray-700 bg-gray-800 text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       required
                     >
-                      <option value="" className="text-gray-400">Select item</option>
-                      {items?.map((invItem) => (
-                        <option key={invItem.item_id} value={invItem.item_id} className="text-gray-900">
+                      {items?.map((invItem, index) => (
+                        <option key={`Index: ${index} & Item id: ${invItem.stock_id}`} value={invItem.item_id} className="text-gray-900">
                           {invItem.item_name}
                         </option>
                       ))}
-                    </select>
+                    </select> */}
                   </div>
                   
                   <div className="col-span-2">
@@ -216,16 +220,6 @@ export default function InvoiceForm() {
           onClose={() => setShowAddCustomerModal(false)}
           onSuccess={refetch}
           addCustomer={addCustomer}
-        />
-      )}
-      {showAddItemModal && (
-        <AddItemModal
-          onClose={() => setShowAddItemModal(false)}
-          onAddItem={(item, qty, price) => {
-            addItemWithDetails(item.item_id, qty, price);
-            setShowAddItemModal(false);
-          }}
-          items={items || []}
         />
       )}
 

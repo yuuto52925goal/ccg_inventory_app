@@ -47,6 +47,7 @@ export interface Item {
 }
 
 export interface StockItem {
+  stock_id?: number;
   item_id: number;
   quantity: number;
   cost_price: number;
@@ -86,4 +87,5 @@ export interface InvoiceItemType {
   qty: number;
   sell_price: number;
   line_part: number;
+  item_name?: string;
 }

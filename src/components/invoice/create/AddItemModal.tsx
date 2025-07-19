@@ -52,8 +52,8 @@ export default function AddItemModal({ onClose, onAddItem, items }: AddItemModal
               required
             >
               <option value="" className="text-gray-400">Choose an item</option>
-              {items.map((item) => (
-                <option key={item.item_id} value={item.item_id} className="text-gray-900">
+              {items.map((item, i) => (
+                <option key={`${i} index, ${item.item_id} item id`} value={item.item_id} className="text-gray-900">
                   {item.item_name} (Stock: {item.quantity})
                 </option>
               ))}

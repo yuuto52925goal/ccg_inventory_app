@@ -34,6 +34,7 @@ export const fetchInventoryStock = async (): Promise<InventoryType[]>  => {
     `);
   if (error) throw error;
   const inventoryData: InventoryType[] = data.map(item => ({
+    stock_id: item.stock_id,
     vendor_name: item.Vendor.business_name,
     item_name: item.Item.name,
     item_id: item.item_id,

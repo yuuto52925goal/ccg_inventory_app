@@ -42,10 +42,10 @@ export const useInvoiceForm = () => {
     ]);
   };
 
-  const addItemWithDetails = (itemId: number, qty: number, price: number) => {
+  const addItemWithDetails = (itemId: number, qty: number, price: number, item_name: string) => {
     setSelectedItems([
       ...selectedItems,
-      { item_id: itemId, qty: qty, sell_price: price, line_part: qty * price },
+      { item_id: itemId, qty: qty, sell_price: price, line_part: qty * price, item_name: item_name },
     ]);
   };
 
