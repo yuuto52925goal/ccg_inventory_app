@@ -1,9 +1,10 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 // import { InvoiceService } from '@/services/invoiceService';
 
-export const POST = async () => {
+export const POST = async (req: NextRequest) => {
   try {
-    // const body = await req.json();
+    const body = await req.json();
+    console.log(body)
     // const service = new InvoiceService(body.customerId, body.items);
     // const invoice = await service.create();
     return NextResponse.json("Sucess", { status: 201 });

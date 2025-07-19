@@ -1,6 +1,6 @@
 import { Address } from "@/types/supabsePublicType"
 import { useCallback, useEffect, useState } from "react"
-import * as addressService from '@/service/address'
+import * as addressService from '@/lib/repositories/address'
 
 export const useAddress = () => {
   const [addressData, setAddressData] = useState<Address[]>([]);

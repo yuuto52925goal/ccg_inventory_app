@@ -1,5 +1,5 @@
-import InvoiceDAO from "@/lib/repositories/InvoiceDAO";
-import InvoiceItemDAO from "@/lib/repositories/InvoiceItemDAO";
+import InvoiceDAO from "@/lib/repositories/invoice/InvoiceDAO";
+import InvoiceItemDAO from "@/lib/repositories/invoice/InvoiceItemDAO";
 import { InvoiceItemType, InvoiceType } from "@/types/supabsePublicType";
 
 export default class InvoiceService {
