@@ -1,3 +1,5 @@
+// import { Timestamp } from "next/dist/server/lib/cache-handlers/types";
+
 export interface Address {
   address_name: string;
   country: string;
@@ -66,4 +68,22 @@ export interface CustomerType {
   email: string;
   fax: string;
   payment_term: string;
+}
+
+export interface InvoiceType {
+  invoice_id?: number;
+  created_at: string;
+  customer_id: number;
+  user_id: number;
+  total_amount: number;
+  is_paid: boolean;
+}
+
+export interface InvoiceItemType {
+  invoice_item_id?: number;
+  item_id: number;
+  invoice_id?: number;
+  qty: number;
+  sell_price: number;
+  line_part: number;
 }
