@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
 
 interface ExtendedUser extends User {
-  user_id?: string;
+  user_id?: number;
 }
 
 interface AuthContextType {

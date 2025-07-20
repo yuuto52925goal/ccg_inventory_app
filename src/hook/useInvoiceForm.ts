@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { useState } from "react";
 import { InvoiceType, InvoiceItemType } from "@/types/supabsePublicType";
 import { useCustomer } from "./useCustomer";
 import { useInventoryStock } from "./useInventoryStock";
@@ -20,14 +19,6 @@ export const useInvoiceForm = () => {
     user_id: 0,
     total_amount: 0,
     is_paid: false,
-  })
-
-  useEffect(() => {
-    if (restService){
-      restService.processInvoice()
-    }else{
-      console.log("Ummm")
-    }
   })
 
 
@@ -68,42 +59,49 @@ export const useInvoiceForm = () => {
   const submit = async () => {
     setLoading(true);
     setMessage("");
-    if (selectedItems.length === 0 || !user?.id) {
+    if (selectedItems.length === 0 || !user?.id || !user.user_id) {
       setMessage("Please select a customer and add at least one item.");
       setLoading(false);
       return;
     }
-    // Insert invoice
-    const { data: invoiceData, error: invoiceError } = await supabase
-      .from("Invoice")
-      .insert({
-        user_id: user?.id,
-        total_amount: getTotal(),
-        is_paid: false,
-        created_at: new Date().toISOString(),
-      })
-      .select()
-      .single();
-    if (invoiceError) {
-      setMessage(invoiceError.message);
+    // Process Invocie
+    if (!restService) {
+      setMessage("Error in rest api service.");
       setLoading(false);
       return;
     }
-    const invoice_id = invoiceData.invoice_id;
-    // Insert invoice items
-    const invoiceItems: InvoiceItemType[] = selectedItems.map((item) => ({
-      item_id: item.item_id,
-      invoice_id,
-      qty: item.qty,
-      sell_price: item.sell_price,
-      line_part: item.line_part,
-    }));
-    const { error: itemError } = await supabase.from("InvoiceItem").insert(invoiceItems);
-    if (itemError) {
-      setMessage(itemError.message);
-      setLoading(false);
-      return;
-    }
+    const newInvoice = { ...invoice, user_id: user.user_id };
+    await restService.processInvoice({invoice: newInvoice, invoiceItems: selectedItems})
+    // const { data: invoiceData, error: invoiceError } = await supabase
+    //   .from("Invoice")
+    //   .insert({
+    //     user_id: user?.id,
+    //     total_amount: getTotal(),
+    //     is_paid: false,
+    //     created_at: new Date().toISOString(),
+    //   })
+    //   .select()
+    //   .single();
+    // if (invoiceError) {
+    //   setMessage(invoiceError.message);
+    //   setLoading(false);
+    //   return;
+    // }
+    // const invoice_id = invoiceData.invoice_id;
+    // // Insert invoice items
+    // const invoiceItems: InvoiceItemType[] = selectedItems.map((item) => ({
+    //   item_id: item.item_id,
+    //   invoice_id,
+    //   qty: item.qty,
+    //   sell_price: item.sell_price,
+    //   line_part: item.line_part,
+    // }));
+    // const { error: itemError } = await supabase.from("InvoiceItem").insert(invoiceItems);
+    // if (itemError) {
+    //   setMessage(itemError.message);
+    //   setLoading(false);
+    //   return;
+    // }
     setMessage("Invoice created successfully!");
     setSelectedItems([]);
     setLoading(false);

@@ -1,3 +1,5 @@
+import { RequestInvoiceType } from "@/types/restApiType";
+
 export default class RestService {
     private authorized: boolean = false;
     private authorizedId: string;
@@ -25,11 +27,11 @@ export default class RestService {
         }
     }
 
-    public async processInvoice(){
+    public async processInvoice(invoiceRequest: RequestInvoiceType){
         const res = await fetch("/api/invoice", {
             method: 'POST',
             headers: this.getHeaders(),
-            body: JSON.stringify("")
+            body: JSON.stringify(invoiceRequest)
         })
         if (!res.ok) throw new Error(`POST api/invoice failed: ${res.status}`)
         return res.json()
