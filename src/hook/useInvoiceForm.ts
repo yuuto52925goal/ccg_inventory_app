@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { InvoiceType, InvoiceItemType } from "@/types/supabsePublicType";
 import { useCustomer } from "./useCustomer";
 import { useInventoryStock } from "./useInventoryStock";
 import { useAuth } from "@/context/AuthProvider";
+import { useRestApi } from "@/context/RestApiProvider";
 
 export const useInvoiceForm = () => {
   const [selectedItems, setSelectedItems] = useState<InvoiceItemType[]>([]);
@@ -11,6 +12,7 @@ export const useInvoiceForm = () => {
   const [loading, setLoading] = useState(false);
   const { items } = useInventoryStock()
   const { customers,  addCustomer, refetch} = useCustomer();
+  const {restService} = useRestApi()
   const { user } = useAuth();
   const [invoice, setInvoice] = useState<InvoiceType>({
     created_at: "",
@@ -18,6 +20,14 @@ export const useInvoiceForm = () => {
     user_id: 0,
     total_amount: 0,
     is_paid: false,
+  })
+
+  useEffect(() => {
+    if (restService){
+      restService.processInvoice()
+    }else{
+      console.log("Ummm")
+    }
   })
 
 
