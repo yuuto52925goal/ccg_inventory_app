@@ -1,5 +1,7 @@
+import { InvoiceRecordSchema } from "@/lib/schemas/invoiceSchemas";
 import { supabase } from "@/lib/supabase";
 import { InvoiceType } from "@/types/supabsePublicType";
+import z from "zod";
 
 export class InvoiceDAO{
   public async postInvoice(invoiceData: InvoiceType): Promise<InvoiceType>{
@@ -19,4 +21,20 @@ export class InvoiceDAO{
      .update({pdf_url: uri})
      .eq('invoice_id', invoiceId)
   }
+}
+
+export const fetchInvoice = async () => {
+  const {data, error} = await supabase
+    .from("Invoice")
+    .select(`
+      *,
+      Customer(*),
+      InvoiceItem(*, Item(*)),
+      User(*)
+    `)
+  if (error) throw error;
+  const parsed = z.array(InvoiceRecordSchema).safeParse(data);
+  if (!parsed.success) throw new Error("No parsed successfully")
+  console.log(parsed.data)
+  return parsed.data;
 }

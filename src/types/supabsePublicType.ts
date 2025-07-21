@@ -89,3 +89,12 @@ export interface InvoiceItemType {
   line_part: number;
   item_name?: string;
 }
+
+export interface InvoiceListType {
+  customerName: string,
+  userName: string,
+  invoiceItem: InvoiceItemType[],
+  is_paid: boolean,
+  pdf_url: string,
+  total_amount: number,
+}

@@ -8,3 +8,13 @@ export const fetchCustomers = async (): Promise<CustomerType[]> => {
     if (error) throw error;
     return data as CustomerType[];
 }
+
+export const fetchCustomerName = async (customerId: number): Promise<string> => {
+  const {data, error} = await supabase
+    .from("Customer")
+    .select('*')
+    .eq('customer_id', customerId)
+    .single()
+  if (error) throw error;
+  return data.business_name
+}

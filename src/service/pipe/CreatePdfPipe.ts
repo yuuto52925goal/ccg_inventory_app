@@ -1,12 +1,14 @@
 import { InvoiceContext } from "@/types/restApiType";
 import { Pipe } from "./Pipe";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
+import { fetchCustomerName } from "../customers";
 // import { writeFile } from "fs/promises"; // optional for dev local saving
 // import { join } from "path";
 
 export class CreatePdfPipe implements Pipe<InvoiceContext> {
   async execute(context: InvoiceContext): Promise<InvoiceContext> {
     const { invoice, invoiceItems } = context.request;
+    const customerName = await fetchCustomerName(invoice.customer_id)
 
     const pdfDoc = await PDFDocument.create();
     const page = pdfDoc.addPage([600, 800]);
@@ -26,7 +28,7 @@ export class CreatePdfPipe implements Pipe<InvoiceContext> {
 
     drawText(`Invoice Receipt`, 18);
     drawText(`Date: ${invoice.created_at}`);
-    drawText(`Customer ID: ${invoice.customer_id}`);
+    drawText(`Customer Name: ${customerName}`);
     drawText(`--------------------------------`);
 
     invoiceItems.forEach((item, i) => {

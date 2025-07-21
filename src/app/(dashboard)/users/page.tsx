@@ -1,5 +1,5 @@
-import ProfileInfo from "@/components/ProfileInfo";
-import InviteUserForm from "@/components/InviteUser";
+import ProfileInfo from "@/components/user/ProfileInfo";
+import InviteUserForm from "@/components/user/InviteUser";
 import LogoutButton from "@/components/Logout";
 
 export default function UsersPage() {

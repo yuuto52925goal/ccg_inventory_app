@@ -1,3 +1,4 @@
+import { InvoiceList } from "@/components/invoice/InvoiceList";
 import Link from "next/link";
 
 export default function InvoicePage() {
@@ -9,6 +10,7 @@ export default function InvoicePage() {
                     Create New Invoice
                 </Link>
             </div>
+            <InvoiceList/>
         </div>
     )
 }

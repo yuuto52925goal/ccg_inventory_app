@@ -4,8 +4,10 @@ import { useCustomer } from "./useCustomer";
 import { useInventoryStock } from "./useInventoryStock";
 import { useAuth } from "@/context/AuthProvider";
 import { useRestApi } from "@/context/RestApiProvider";
+import { useRouter } from "next/navigation";
 
 export const useInvoiceForm = () => {
+  const router = useRouter()
   const [selectedItems, setSelectedItems] = useState<InvoiceItemType[]>([]);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -75,6 +77,7 @@ export const useInvoiceForm = () => {
     setMessage("Invoice created successfully!");
     setSelectedItems([]);
     setLoading(false);
+    router.push('/invoice')
   };
 
   return {
