@@ -30,5 +30,11 @@ export const RequestInvoiceSchema = z.object({
   invoiceItems: z.array(InvoiceItemSchema)
 })
 
-
 export type RequestInvoice = z.infer<typeof RequestInvoiceSchema>; 
+
+export type InvoiceContext = {
+  request: RequestInvoiceType;
+  invoiceId?: number;
+  pdf?: Buffer;
+  // Add whatever you need to pass down the pipe
+};

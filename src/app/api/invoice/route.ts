@@ -1,5 +1,3 @@
-import InvoiceDAO from '@/lib/repositories/invoice/InvoiceDAO';
-import InvoiceItemDAO from '@/lib/repositories/invoice/InvoiceItemDAO';
 import AuthUtil from '@/lib/utils/authUtil';
 import InvoiceService from '@/service/apiService/InvoiceService';
 import { RequestInvoiceType, RequestInvoiceSchema } from '@/types/restApiType';
@@ -20,10 +18,7 @@ export const POST = async (req: NextRequest) => {
       );
     }
     const requestData: RequestInvoiceType = parsed.data;
-
-    const invoiceDAO = new InvoiceDAO();
-    const invoiceItemDAO = new InvoiceItemDAO();
-    InvoiceService.ResolveInvoice(invoiceDAO, invoiceItemDAO, requestData)
+    InvoiceService.ResolveInvoice(requestData)
     return NextResponse.json("Sucess", { status: 201 });
   } catch (e) {
     return NextResponse.json({ error: (e as Error).message }, { status: 500 });

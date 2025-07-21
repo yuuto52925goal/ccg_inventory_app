@@ -1,16 +1,17 @@
-import InvoiceDAO from "@/lib/repositories/invoice/InvoiceDAO";
-import InvoiceItemDAO from "@/lib/repositories/invoice/InvoiceItemDAO";
-import {RequestInvoiceType} from "@/types/restApiType"
+import {InvoiceContext, RequestInvoiceType} from "@/types/restApiType"
+import { InvoicePipelineFactory } from "../factory/InvoicePipeFactory";
 
 export default class InvoiceService {
-
+  
   public static async ResolveInvoice(
-    invoiceDAO: InvoiceDAO,
-    invoiceItemDAO: InvoiceItemDAO,
     invoiceRequest: RequestInvoiceType,
   ) {
-    console.log(invoiceRequest)
-    invoiceDAO.postInvoice();
-    invoiceItemDAO.postInvoiceItem()
+    const context: InvoiceContext = { request: invoiceRequest };
+    const pipes = InvoicePipelineFactory.buildPipeline();
+    let current = context;
+    for (const pipe of pipes) {
+      current = await pipe.execute(current);
+    }
+    return current;
   }
 }

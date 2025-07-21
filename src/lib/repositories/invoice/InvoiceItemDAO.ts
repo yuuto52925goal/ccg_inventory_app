@@ -1,4 +1,4 @@
-export default class InvoiceItemDAO{
+export class InvoiceItemDAO{
   public async postInvoiceItem(){
     console.log("hello")
   }
