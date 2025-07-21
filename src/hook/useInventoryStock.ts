@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { InventoryType } from '@/types/supabsePublicType';
-import * as itemStock from '@/service/itemStock';
+import * as itemStock from '@/lib/repositories/itemStock';
 
 export const useInventoryStock = () => {
   const [items, setItems] = useState<InventoryType[]>([]);

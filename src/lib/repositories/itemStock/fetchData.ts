@@ -13,6 +13,13 @@ export const fetchItemStock = async (): Promise<StockItem[]> => {
   return data as StockItem[];
 };
 
+export interface ItemGorupByNameType {
+  item_id: number,
+  item_name: string,
+  qty: number,
+  average_cost: number,
+}
+
 export const fetchItemStockModal = async () => {
   const { data, error } = await supabase
     .rpc('get_items_grouped_by_item');
@@ -21,7 +28,7 @@ export const fetchItemStockModal = async () => {
     throw error;
   }
 
-  return data;
+  return data as ItemGorupByNameType[];
 };
 
 export const fetchInventoryStock = async (): Promise<InventoryType[]>  => {
