@@ -70,38 +70,8 @@ export const useInvoiceForm = () => {
       setLoading(false);
       return;
     }
-    const newInvoice = { ...invoice, user_id: user.user_id };
+    const newInvoice = { ...invoice, user_id: user.user_id, total_amount: getTotal() };
     await restService.processInvoice({invoice: newInvoice, invoiceItems: selectedItems})
-    // const { data: invoiceData, error: invoiceError } = await supabase
-    //   .from("Invoice")
-    //   .insert({
-    //     user_id: user?.id,
-    //     total_amount: getTotal(),
-    //     is_paid: false,
-    //     created_at: new Date().toISOString(),
-    //   })
-    //   .select()
-    //   .single();
-    // if (invoiceError) {
-    //   setMessage(invoiceError.message);
-    //   setLoading(false);
-    //   return;
-    // }
-    // const invoice_id = invoiceData.invoice_id;
-    // // Insert invoice items
-    // const invoiceItems: InvoiceItemType[] = selectedItems.map((item) => ({
-    //   item_id: item.item_id,
-    //   invoice_id,
-    //   qty: item.qty,
-    //   sell_price: item.sell_price,
-    //   line_part: item.line_part,
-    // }));
-    // const { error: itemError } = await supabase.from("InvoiceItem").insert(invoiceItems);
-    // if (itemError) {
-    //   setMessage(itemError.message);
-    //   setLoading(false);
-    //   return;
-    // }
     setMessage("Invoice created successfully!");
     setSelectedItems([]);
     setLoading(false);
