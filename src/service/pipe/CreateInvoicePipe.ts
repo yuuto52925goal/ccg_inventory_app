@@ -8,6 +8,6 @@ export class CreateInvoicePipe implements Pipe<InvoiceContext> {
   async execute(context: InvoiceContext): Promise<InvoiceContext> {
     const dao = new Dao.InvoiceDAO();
     const invoice = await dao.postInvoice(context.request.invoice);
-    return { ...context, invoiceId: invoice.invoice_id };
+    return { request: {...context.request, invoice: invoice}, invoiceId: invoice.invoice_id };
   }
 }

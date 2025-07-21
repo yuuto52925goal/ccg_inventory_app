@@ -11,4 +11,12 @@ export class InvoiceDAO{
     if (error) throw error;
     return data as InvoiceType;
   }
+
+  public static async updateUrlInvoice(invoiceId: number, uri: string){
+    // if (!invoice_Id) throw "Error not proving invoice id";
+    await supabase
+     .from("Invoice")
+     .update({pdf_url: uri})
+     .eq('invoice_id', invoiceId)
+  }
 }
