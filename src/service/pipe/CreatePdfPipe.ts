@@ -1,9 +1,9 @@
 import { InvoiceContext } from "@/types/restApiType";
 import { Pipe } from "./Pipe";
 
-export class CreateInvoiceItemsPipe implements Pipe<InvoiceContext> {
+export class CreatePdfPipe implements Pipe<InvoiceContext> {
   async execute(context: InvoiceContext): Promise<InvoiceContext> {
-    // TODO: Implement invoice items creation logic
+    // TODO: Implement PDF creation logic
     return context;
   }
 }

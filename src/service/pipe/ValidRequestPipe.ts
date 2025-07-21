@@ -5,6 +5,7 @@ import { InvoiceItemType } from "@/types/supabsePublicType";
 
 export class ValidateRequestPipe implements Pipe<InvoiceContext> {
   async execute(context: InvoiceContext): Promise<InvoiceContext> {
+    console.log(context.request)
     const { invoice, invoiceItems } = context.request;
     if (!invoice || !invoiceItems.length) {
       throw new Error("Invalid request: invoice or items missing.");
@@ -13,7 +14,7 @@ export class ValidateRequestPipe implements Pipe<InvoiceContext> {
     const collectedInvoiceItems = this.collectInvoiceItems(invoiceItems)
     const validateByStock = await this.validateStockItem(collectedInvoiceItems)
     if (!validateByStock) throw new Error("Insufficient stock for one or more items.");
-
+    console.log("Valid request")
     return {request: {invoice, invoiceItems: collectedInvoiceItems}};
   }
 
@@ -23,6 +24,7 @@ export class ValidateRequestPipe implements Pipe<InvoiceContext> {
       const existing = mergedMap.get(item.item_id);
       if (existing) {
         existing.qty += item.qty; 
+        existing.line_part = existing.qty * existing.sell_price
       } else {
         mergedMap.set(item.item_id, { ...item }); 
       }

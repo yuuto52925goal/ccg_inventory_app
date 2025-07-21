@@ -18,7 +18,7 @@ export const POST = async (req: NextRequest) => {
       );
     }
     const requestData: RequestInvoiceType = parsed.data;
-    InvoiceService.ResolveInvoice(requestData)
+    await InvoiceService.ResolveInvoice(requestData)
     return NextResponse.json("Sucess", { status: 201 });
   } catch (e) {
     return NextResponse.json({ error: (e as Error).message }, { status: 500 });
