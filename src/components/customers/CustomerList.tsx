@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { CustomerType } from '@/types/supabsePublicType';
 
 export default function CustomerList() {
-  const { customers, loading, error, deleteCustomer, addCustomer, updateCustomer, refetch } = useCustomer();
+  const { customers, loading, error, addCustomer, updateCustomer, refetch } = useCustomer();
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [customerToUpdate, setCustomerToUpdate] = useState<CustomerType | null>(null);
@@ -30,7 +30,7 @@ export default function CustomerList() {
               <th className="border px-4 py-2">Fax</th>
               <th className="border px-4 py-2">Payment Term</th>
               <th className="border px-4 py-2">Edit</th>
-              <th className="border px-4 py-2">Delete</th>
+              {/* <th className="border px-4 py-2">Delete</th> */}
             </tr>
           </thead>
           <tbody>
@@ -48,12 +48,12 @@ export default function CustomerList() {
                   <td className="border px-4 py-2">{customer.fax}</td>
                   <td className="border px-4 py-2">{customer.payment_term}</td>
                   <td className="border px-4 py-2 bg-blue-400 cursor-pointer hover:bg-blue-600" onClick={() => { setCustomerToUpdate(customer); setShowUpdateModal(true); }}>Edit</td>
-                  <td
+                  {/* <td
                     className="border px-4 py-2 bg-red-400 cursor-pointer hover:bg-red-600"
                     onClick={() => customer.customer_id !== undefined && deleteCustomer(customer.customer_id)}
                   >
                     Delete
-                  </td>
+                  </td> */}
                 </tr>
               ))
             )}

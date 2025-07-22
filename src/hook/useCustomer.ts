@@ -1,6 +1,6 @@
 import { CustomerType } from "@/types/supabsePublicType"
 import { useEffect, useState, useCallback } from "react"
-import * as customerService from "@/service/customers"
+import * as customerService from "@/lib/repositories/customers"
 
 
 export const useCustomer = () => {

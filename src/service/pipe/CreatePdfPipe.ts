@@ -1,7 +1,7 @@
 import { InvoiceContext } from "@/types/restApiType";
 import { Pipe } from "./Pipe";
 import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
-import { fetchCustomerName } from "../customers";
+import { fetchCustomerName } from "../../lib/repositories/customers";
 // import { writeFile } from "fs/promises"; // optional for dev local saving
 // import { join } from "path";
 
