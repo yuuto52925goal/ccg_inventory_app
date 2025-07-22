@@ -69,6 +69,7 @@ export interface CustomerType {
   email: string;
   fax: string;
   payment_term: string;
+  address_name?: string;
 }
 
 export interface InvoiceType {

@@ -24,7 +24,7 @@ export default function CustomerList() {
           <thead className="bg-[#334155] text-white">
             <tr>
               <th className="border px-4 py-2">Business Name</th>
-              <th className="border px-4 py-2">Address ID</th>
+              <th className="border px-4 py-2">Address Name</th>
               <th className="border px-4 py-2">Phone</th>
               <th className="border px-4 py-2">Email</th>
               <th className="border px-4 py-2">Fax</th>
@@ -42,7 +42,7 @@ export default function CustomerList() {
               customers.map((customer) => (
                 <tr key={customer.customer_id} className="hover:bg-[#475569]">
                   <td className="border px-4 py-2">{customer.business_name}</td>
-                  <td className="border px-4 py-2">{customer.address_id}</td>
+                  <td className="border px-4 py-2">{customer.address_name ? customer.address_name : customer.address_id}</td>
                   <td className="border px-4 py-2">{customer.phone}</td>
                   <td className="border px-4 py-2">{customer.email}</td>
                   <td className="border px-4 py-2">{customer.fax}</td>
