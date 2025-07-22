@@ -6,6 +6,5 @@ export const fetchItem = async () => {
     .from("Item")
     .select("*")
   if (error) throw error
-  console.log(data)
   return data as Item[]
 }
