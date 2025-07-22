@@ -21,9 +21,22 @@ export const useAddress = () => {
     }
   }, [])
 
+  const updateAddress = useCallback(async (address: Address) => {
+    setLoading(true)
+    setError(null)
+    try {
+      await addressService.updateAddress(address)
+    }catch(err: unknown){
+      if (err instanceof Error) setError(err.message);
+      else setError("Failed to fetch customers");
+    } finally{
+      setLoading(false)
+    }
+  }, [])
+
   useEffect(() => {
     fetchAddress()
   }, [fetchAddress])
 
-  return { addressData, loading,  error}
+  return { addressData, loading,  error, updateAddress, refetch: fetchAddress}
 }
