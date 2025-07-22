@@ -16,6 +16,7 @@ export interface Vendor {
   phone: string;
   email: string;
   fax: string;
+  address_name?: string
 }
 
 export interface PurchaseOrder {
