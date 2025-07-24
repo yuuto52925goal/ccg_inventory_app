@@ -2,7 +2,8 @@
 
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip, Legend } from 'chart.js';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
@@ -24,6 +25,11 @@ const data = {
 
 export default function DashboardPage() {
   const [search, setSearch] = useState('');
+  const route = useRouter();
+
+  useEffect(() => {
+    route.push("/dashboard")
+  })
 
   return (
     <div className="min-h-screen flex bg-[#0f172a] text-white">

@@ -21,6 +21,7 @@ export interface ItemGorupByNameType {
 }
 
 export const fetchItemStockModal = async () => {
+  console.log("Group by item rpc")
   const { data, error } = await supabase
     .rpc('get_items_grouped_by_item');
 

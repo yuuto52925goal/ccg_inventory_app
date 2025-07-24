@@ -41,7 +41,9 @@ export const InvoiceList = () => {
                     <tr className="bg-gray-900 text-white">
                       <td colSpan={4} className="p-4 border">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {invoice.InvoiceItem?.map((item, itemIdx) => (
+                          {invoice.InvoiceItem
+                          ?.filter(item => item.qty !== 0)
+                          ?.map((item, itemIdx) => (
                             <div key={itemIdx} className="bg-gray-800 p-4 rounded-lg">
                               <p><strong>Item Name:</strong> {item.Item?.name ?? '-'}</p>
                               <p><strong>Quantity:</strong> {item.qty}</p>

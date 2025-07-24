@@ -7,6 +7,7 @@ import { fetchCustomerName } from "../../lib/repositories/customers";
 
 export class CreatePdfPipe implements Pipe<InvoiceContext> {
   async execute(context: InvoiceContext): Promise<InvoiceContext> {
+    console.log("create pdf pipe")
     const { invoice, invoiceItems } = context.request;
     const customerName = await fetchCustomerName(invoice.customer_id)
 

@@ -50,9 +50,11 @@ export const ItemSelect = ({ items, onAddItem }: ItemSelectProps) => {
           </tr>
         </thead>
         <tbody>
-          {filtered.map((item) => (
+          {filtered
+          .filter(item => item.quantity !== 0)
+          .map((item, i) => (
             <tr
-              key={item.item_id + item.lot_number}
+              key={i + "" + item.item_id + item.lot_number}
               className="hover:bg-gray-700 text-white"
             >
               <td className="py-2 w-1/6">{item.item_name}</td>

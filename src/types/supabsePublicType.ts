@@ -34,6 +34,7 @@ export interface PurchaseOrderItem {
   qty: number;
   cost: number;
   line_total: number;
+  stock_id?: number
 }
 
 export interface Item {
@@ -55,6 +56,7 @@ export interface StockItem {
   lot_number: string;
   expire_date: string;
   vendor_id: number;
+  received_date?: string;
 }
 
 export interface InventoryType extends StockItem {

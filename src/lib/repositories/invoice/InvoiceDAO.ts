@@ -2,6 +2,7 @@ import { InvoiceRecordSchema } from "@/lib/schemas/invoiceSchemas";
 import { supabase } from "@/lib/supabase";
 import { InvoiceType } from "@/types/supabsePublicType";
 import z from "zod";
+import { InvoiceDeduct } from "../itemStock/editData";
 
 export class InvoiceDAO{
   public async postInvoice(invoiceData: InvoiceType): Promise<InvoiceType>{
@@ -21,6 +22,13 @@ export class InvoiceDAO{
      .update({pdf_url: uri})
      .eq('invoice_id', invoiceId)
   }
+
+  public static async updateStockIdInvoice(invoiceId: number, invoiceDeduct: InvoiceDeduct[]){
+    await supabase
+    .from("Invoice")
+    .update({"deduct": invoiceDeduct})
+    .eq('invoice_id', invoiceId)
+  }
 }
 
 export const fetchInvoice = async () => {
@@ -38,3 +46,10 @@ export const fetchInvoice = async () => {
   console.log(parsed.data)
   return parsed.data;
 }
+
+export const deleteInvoice = async (inoiceId: number) => {
+  const {error} = await supabase.from("Invoice").delete().eq("invoice_id", inoiceId)
+  if (!error) throw error;
+  return;
+}
+
