@@ -1,10 +1,18 @@
 import { supabase } from "@/lib/supabase"
-import { PurchaseOrderItem, StockItem } from "@/types/supabsePublicType"
+import { PurchaseOrderItem} from "@/types/supabsePublicType"
+import * as ItemStockDao from '@/lib/repositories/itemStock'
 
-export const InvoiceRollBack = async (itemstock: StockItem[]) => {
-  const {error} = await supabase.from("ItemStock").insert(itemstock)
-  if (!error) throw error
-  return;
+export const InvoiceRollBack = async (invoiceDeducts: ItemStockDao.InvoiceDeduct[]) => {
+  const { error } = await supabase.rpc('rollback_item_stock', {
+    invoice_deducts: invoiceDeducts,
+  });
+
+  if (error) {
+    console.error("Error adding item stock:", error);
+    throw error;
+  }
+
+  return "Stock updated successfully!";
 }
 
 export const purchaseOrderRollBack = async (poItems: PurchaseOrderItem[]) => {

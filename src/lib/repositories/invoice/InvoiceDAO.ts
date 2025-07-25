@@ -47,9 +47,21 @@ export const fetchInvoice = async () => {
   return parsed.data;
 }
 
-export const deleteInvoice = async (inoiceId: number) => {
-  const {error} = await supabase.from("Invoice").delete().eq("invoice_id", inoiceId)
-  if (!error) throw error;
-  return;
+export const deleteInvoice = async (invoiceId: number) => {
+  console.log("Delete invocie running", invoiceId)
+  const { data, error } = await supabase
+    .from("Invoice")
+    .delete()
+    .eq("invoice_id", invoiceId)
+    .select("*")
+    .single()
+
+  console.log(data)
+  if (error) throw error;
+  if (data.deduct){
+    return data.deduct as InvoiceDeduct[]
+  }else{
+    return "No data"
+  }
 }
 

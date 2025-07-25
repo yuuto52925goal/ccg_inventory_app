@@ -5,7 +5,7 @@ import { useInvoice } from "@/hook/useInvoice";
 import type { InvoiceRecord } from "@/lib/schemas/invoiceSchemas";
 
 export const InvoiceList = () => {
-  const { invoices, loading, error } = useInvoice();
+  const { invoices, loading, error, deleteInvoice } = useInvoice();
   const [extendedId, setExtendedId] = useState<number | null>(null);
 
   const handleToggle = (index: number) => {
@@ -26,6 +26,8 @@ export const InvoiceList = () => {
                 <th className="px-4 py-2 border">User</th>
                 <th className="px-4 py-2 border">Total</th>
                 <th className="px-4 py-2 border">Items</th>
+                <th className="px-4 py-2 border">Pdf</th>
+                <th className="px-4 py-2 border">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -36,6 +38,27 @@ export const InvoiceList = () => {
                     <td className="px-4 py-2 border">{invoice.User?.name || '-'}</td>
                     <td className="px-4 py-2 border">${invoice.total_amount?.toFixed(2) ?? "-"}</td>
                     <td className="px-4 py-2 border">{invoice.InvoiceItem?.length || 0} items</td>
+                    <td className="px-4 py-2 border">{invoice.pdf_url ? (
+                      <a href={invoice.pdf_url} target="_blank" rel="noopener noreferrer" className="text-blue-400 underline">
+                        View PDF
+                      </a>
+                    ) : (
+                      '-'
+                    )}</td>
+                    <td className="px-4 py-2 border flex items-center justify-between bg-red-500 hover:bg-red-600">
+                      <div className="flex items-center justify-between gap-2 min-w-fit">
+                        <button
+                          className="bg-red-500 hover:bg-red-600 text-white text-sm px-2 py-1 rounded"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // handleDelete(invoice.invoice_id);
+                            deleteInvoice(invoice.invoice_id)
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                   {extendedId === idx && (
                     <tr className="bg-gray-900 text-white">

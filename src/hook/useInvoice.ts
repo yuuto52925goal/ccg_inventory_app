@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import * as InvoiceDao from '@/lib/repositories/invoice';
+import * as ItemStockDao from '@/lib/repositories/itemStock'
 import type { InvoiceRecord } from "@/lib/schemas/invoiceSchemas";
 
 export function useInvoice() {
@@ -28,8 +29,12 @@ export function useInvoice() {
     setLoading(true);
     setError(null);
     try {
-      await InvoiceDao.deleteInvoice(invoiceId);
       await InvoiceDao.deleteInvoiceItems(invoiceId);
+      const deleteInvoiceResult = await InvoiceDao.deleteInvoice(invoiceId);
+      if (deleteInvoiceResult !== "No data"){
+        console.log("You are running")
+        await ItemStockDao.InvoiceRollBack(deleteInvoiceResult)
+      }
       await refetch();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to delete invoice");

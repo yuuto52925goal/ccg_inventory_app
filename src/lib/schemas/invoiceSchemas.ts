@@ -21,6 +21,7 @@ const UserSchema = z.object({
 });
 
 export const InvoiceRecordSchema = z.object({
+  invoice_id: z.number(),
   is_paid: z.boolean(),
   pdf_url: z.string().nullable().optional(),
   total_amount: z.number(),

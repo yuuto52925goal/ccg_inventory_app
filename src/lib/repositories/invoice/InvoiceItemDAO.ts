@@ -21,6 +21,6 @@ export class InvoiceItemDAO{
 
 export const deleteInvoiceItems = async (invoiceId: number) => {
   const {error} = await supabase.from("InvoiceItem").delete().eq('invoice_id', invoiceId)
-  if (!error) throw error
+  if (error) throw error
   return;
 }
